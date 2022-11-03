@@ -349,14 +349,11 @@ class MySearchDelegate extends SearchDelegate {
         return result2.contains(input);
       }
     }).toList();
-    print("suggestions:::::$suggestions");
     return ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (context, index) {
           final sugg = jsonDecode(suggestions[index])['title'];
           final sugg2 = jsonDecode(suggestions[index])['description'];
-          print("sugggg::: $sugg");
-          print("suuggg2$sugg2");
           return ListTile(
             title: query.isEmpty ? null : Text(sugg),
             subtitle: query.isEmpty ? null : Text(sugg2),
@@ -372,6 +369,7 @@ class MySearchDelegate extends SearchDelegate {
   }
 }
 
+//ignore: must_be_immutable
 class Result extends StatefulWidget {
   List<String> value;
   int index;
@@ -384,7 +382,12 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Title : ${jsonDecode(widget.value[widget.index])["title"]}"),elevation: 2.0,backgroundColor: Colors.teal,),
+      appBar: AppBar(
+        title:
+            Text("Title : ${jsonDecode(widget.value[widget.index])["title"]}"),
+        elevation: 2.0,
+        backgroundColor: Colors.teal,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -394,9 +397,14 @@ class _ResultState extends State<Result> {
                 Icons.description,
                 color: Colors.teal,
               ),
-              title: const Text("Description :",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-              subtitle: Text(jsonDecode(widget.value[widget.index])["description"],style: const TextStyle(fontSize: 20
-              ),),
+              title: const Text(
+                "Description :",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                jsonDecode(widget.value[widget.index])["description"],
+                style: const TextStyle(fontSize: 20),
+              ),
             ),
           ),
         ],

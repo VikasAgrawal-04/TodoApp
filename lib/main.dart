@@ -105,8 +105,6 @@ class _TodoAppState extends State<TodoApp> {
               child: const Text('Submit'),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  itemList.clear();
-                  decodedMap.clear();
                   _addItems(textController1.text, textController2.text);
                   floating.add(jsonEncode({
                     'title': textController1.text,
@@ -201,8 +199,10 @@ class _TodoAppState extends State<TodoApp> {
                       context: context,
                       builder: (context) => AlertDialog(
                             shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20.0),
+                              ),
+                            ),
                             title: const Text("Confirmation"),
                             content:
                                 const Text("Are you sure you want to delete?"),
@@ -293,10 +293,14 @@ class _TodoAppState extends State<TodoApp> {
                       ),
                     ),
                     value: decodedMap[index]['state'],
-                    onChanged: (bool? value) {
+                    onChanged: (bool? value) async{
+                      decodedMap[index]['state'] = value!;
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.remove("items");
+                      await prefs.setStringList("items", [for(int i = 0; i < decodedMap.length; i++) jsonEncode(decodedMap[i])]);
+
                       setState(
                         () {
-                          decodedMap[index]['state'] = value!;
                         },
                       );
                     },
